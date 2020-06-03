@@ -1,2 +1,18 @@
 # sdo_pimunn
-A parser of PIMU SDO
+A client of PIMU SDO
+
+
+# Example
+
+sdo = SDO('1234', '123456')
+test_id = '4558'
+sesskey, attempt_id = sdo.start_attempt(test_id)
+
+## QA (question & answers):
+page = sdo.get_page(0, test_id, attempt_id)
+b = bs4.BeautifulSoup(page.text)
+sdo.end_attempt(test_id, sesskey, attempt_id)
+
+## QRA (question & right answers):
+test = sdo.end_attempt(test_id, sesskey, attempt_id)
+b = bs4.BeautifulSoup(test.text)
