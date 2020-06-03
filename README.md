@@ -2,7 +2,7 @@
 A client of PIMU SDO
 
 
-# Example
+# Login
 ```python
 sdo = SDO('1234', '123456')
 test_id = '4558'
