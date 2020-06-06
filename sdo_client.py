@@ -21,18 +21,19 @@ class SDO:
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'ru,en;q=0.9'}
     
-    if moodle_id:
-      try:
-        self.log_cookie = {'MoodleSession': moodle_id}
-        r = requests.get('https://sdo.pimunn.net/login/index.php', 
-                         headers=self.headers, cookies=self.log_cookie, verify=False)
-        b = BeautifulSoup(r.text, 'html.parser')
-        logininfo = b.find('div', attrs={'class': 'logininfo'}).find('a').text
-        print('Вы зашли под именем: ' + logininfo)
-      except:
-        self.log_cookie = self.login_sdo(username, password)
-    else:
+    try:
+      self.log_cookie = {'MoodleSession': moodle_id}
+      self.check_login(self.log_cookie)
+    except:
       self.log_cookie = self.login_sdo(username, password)
+
+
+  def check_login(self, log_cookie):
+    r = requests.get('https://sdo.pimunn.net/login/index.php', 
+                     headers=self.headers, cookies=log_cookie, verify=False)
+    b = BeautifulSoup(r.text, 'html.parser')
+    logininfo = b.find('div', attrs={'class': 'logininfo'}).find('a').text
+    print('Вы зашли под именем: ' + logininfo)
 
 
   def login_sdo(self, username, password):
@@ -56,6 +57,7 @@ class SDO:
     # i don't know why, but we should go on this location with main log cookies ("registration")
     requests.get(r2.headers['location'], headers=self.headers, 
                  cookies=r2_cookies, allow_redirects=False, verify=False)
+    self.check_login(r2_cookies)
     return r2_cookies
 
 
