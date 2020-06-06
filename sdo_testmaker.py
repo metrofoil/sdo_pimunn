@@ -142,7 +142,8 @@ print('SDO TESTMAKER 0.1')
 print('------------------------------')
 t = TestMaker()
 print('------------------------------')
-print('Чтобы поменять режим работы, введите:\n "qra" (с правильными ответами)\n "qa" (просто ответы)\n')
+print('Чтобы поменять режим работы, введите:\n "qra" (с правильными ответами)\n "qa" (просто ответы)')
+print('------------------------------')
 maker_type = 'qra'
 while True:
   inp = input(maker_type + '>> ').strip()
@@ -150,7 +151,14 @@ while True:
     maker_type = inp
   else:
     try:
-      t.make_test(int(inp), maker_type)
+      if '-' in inp:
+        inp = inp.split('-')
+        nums = range(int(inp[0]), int(inp[1]) + 1)
+      elif ',' in inp:
+        nums = [num.strip() for num in inp.split(',')]
+      else:
+        nums = inp.split()
+      for num in nums:
+        t.make_test(num, maker_type)
     except:
       print('неправильный ввод')
-
